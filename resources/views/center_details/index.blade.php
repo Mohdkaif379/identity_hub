@@ -43,15 +43,20 @@
     <i class="fas fa-arrow-left text-sm"></i>
     Back
 </a>
+               <a href="{{ route('center_details.create') }}"
+   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs sm:text-sm font-medium shadow-sm">
+    <i class="fas fa-plus text-sm"></i>
+    Create Center
+</a>
                <a href="{{ route('center_details.export', request()->query()) }}"
    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-950 via-green-900 to-green-800 text-white text-xs sm:text-sm font-medium hover:from-green-900 hover:to-green-700 shadow-sm">
     <i class="fas fa-download text-sm"></i>
     Export to Excel
 </a>
-<a href="{{ route('center_details.create') }}"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs sm:text-sm font-medium shadow-sm">
-    <i class="fas fa-plus text-sm"></i>
-    Create Center
+<a href="{{ route('center_details.export_pdf', request()->query()) }}"
+   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-red-950 via-red-900 to-red-800 text-white text-xs sm:text-sm font-medium hover:from-red-900 hover:to-red-700 shadow-sm">
+    <i class="fas fa-file-pdf text-sm"></i>
+    Export to PDF
 </a>
 
             </div>
@@ -69,6 +74,27 @@
                 {{ session('error') }}
             </div>
         @endif
+
+        <div class="mx-4 sm:mx-8 mt-4 rounded-2xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_10px_26px_-20px_rgba(15,23,42,0.35)]">
+            <form method="GET" action="{{ route('center_details.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+                <div class="flex flex-col gap-1 sm:col-span-2 lg:col-span-6">
+                    <label class="text-xs font-semibold text-slate-600">Global Search</label>
+                    <input type="text" name="q" value="{{ request('q') }}" class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" placeholder="Search any field">
+                </div>
+
+
+                <div class="flex flex-wrap gap-2 lg:col-span-6">
+                    <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs sm:text-sm font-medium hover:from-blue-900 hover:to-blue-700 shadow-sm">
+                        <i class="fas fa-filter text-sm"></i>
+                        Apply Filters
+                    </button>
+                    <a href="{{ route('center_details.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-slate-900 text-xs sm:text-sm font-medium border border-slate-300 hover:bg-slate-100">
+                        <i class="fas fa-rotate-left text-sm"></i>
+                        Clear
+                    </a>
+                </div>
+            </form>
+        </div>
 
         <div class="px-4 sm:px-8 pb-8">
             <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200/80 bg-white shadow-[0_12px_32px_-22px_rgba(15,23,42,0.4)]">

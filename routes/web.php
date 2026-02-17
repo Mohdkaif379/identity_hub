@@ -19,10 +19,10 @@ Route::get('center_details/{id}/edit', [CenterDetailController::class, 'edit'])-
 Route::put('center_details/{id}', [CenterDetailController::class, 'update'])->name('center_details.update');
 Route::delete('center_details/{id}', [CenterDetailController::class, 'destroy'])->name('center_details.destroy');
 Route::get('center_details/export', [CenterDetailController::class, 'export'])->name('center_details.export');
+Route::get('center_details/export-pdf', [CenterDetailController::class, 'exportPdf'])->name('center_details.export_pdf');
 Route::get('center_details/thank-you', function () {
     return view('center_details.thankyou');
 })->name('center_details.thankyou');
-Route::get('center_details/export', [CenterDetailController::class, 'export'])->name('center_details.export');
 
 Route::get('/', [LoginController::class, 'showLogin'])->name('admin.login');
 Route::post('admin/login', [LoginController::class, 'login'])->name('admin.login.submit');

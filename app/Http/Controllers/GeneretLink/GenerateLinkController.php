@@ -4,6 +4,7 @@ namespace App\Http\Controllers\GeneretLink;
 
 use App\Http\Controllers\Controller;
 use App\Models\GenerateLink;
+use App\Models\CenterDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -75,6 +76,8 @@ class GenerateLinkController extends Controller
     public function destroy(int $id)
     {
         $record = GenerateLink::findOrFail($id);
+
+        CenterDetails::where('generate_link_id', $record->id)->delete();
         $record->delete();
 
         return redirect()->back()->with('success', 'Link deleted successfully.');

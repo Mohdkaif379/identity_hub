@@ -12,21 +12,72 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CenterDetailController extends Controller
 {
+    private function applyFilters($query, Request $request)
+    {
+        $search = $request->query('q');
+        if ($search) {
+            $search = trim($search);
+            $query->where(function ($subQuery) use ($search) {
+                $subQuery->where('alias', 'like', '%' . $search . '%')
+                    ->orWhere('ecn', 'like', '%' . $search . '%')
+                    ->orWhere('centername', 'like', '%' . $search . '%')
+                    ->orWhere('name', 'like', '%' . $search . '%')
+                    ->orWhere('projectscode', 'like', '%' . $search . '%')
+                    ->orWhere('crmid', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('gender', 'like', '%' . $search . '%')
+                    ->orWhere('kyc_status', 'like', '%' . $search . '%')
+                    ->orWhere('created_by_my_side', 'like', '%' . $search . '%')
+                    ->orWhere('created_by', 'like', '%' . $search . '%')
+                    ->orWhere('approved_by', 'like', '%' . $search . '%')
+                    ->orWhere('ip_address', 'like', '%' . $search . '%');
+            });
+        }
+
+        $generateLinkId = $request->query('generate_link_id');
+        if ($generateLinkId) {
+            $query->where('generate_link_id', $generateLinkId);
+        }
+
+        $centerName = $request->query('centername');
+        if ($centerName) {
+            $query->where('centername', 'like', '%' . $centerName . '%');
+        }
+
+        $email = $request->query('email');
+        if ($email) {
+            $query->where('email', 'like', '%' . $email . '%');
+        }
+
+        $kycStatus = $request->query('kyc_status');
+        if ($kycStatus) {
+            $query->where('kyc_status', $kycStatus);
+        }
+
+        $fromDate = $request->query('from_date');
+        if ($fromDate) {
+            $query->whereDate('created_at', '>=', $fromDate);
+        }
+
+        $toDate = $request->query('to_date');
+        if ($toDate) {
+            $query->whereDate('created_at', '<=', $toDate);
+        }
+
+        return $query;
+    }
+
     public function index(Request $request)
     {
         if (!Auth::check()) {
             return redirect()->route('admin.login');
         }
 
-        $centersQuery = CenterDetails::query();
-
-        $generateLinkId = $request->query('generate_link_id');
-        if ($generateLinkId) {
-            $centersQuery->where('generate_link_id', $generateLinkId);
-        }
+        $centersQuery = $this->applyFilters(CenterDetails::query(), $request);
 
         $centers = $centersQuery
             ->orderByDesc('id')
@@ -75,7 +126,9 @@ class CenterDetailController extends Controller
         } else {
             $validated['password'] = Hash::make(Str::random(16));
         }
-        $validated['ip_address'] = $request->ip();
+        if (!Auth::check()) {
+            $validated['ip_address'] = $request->ip();
+        }
 
         $center = CenterDetails::create($validated);
 
@@ -133,7 +186,9 @@ class CenterDetailController extends Controller
             unset($validated['password']);
         }
 
-        $validated['ip_address'] = $request->ip();
+        if (!Auth::check()) {
+            $validated['ip_address'] = $request->ip();
+        }
 
         $center->update($validated);
 
@@ -154,12 +209,7 @@ class CenterDetailController extends Controller
 
     public function export(Request $request)
     {
-        $centersQuery = CenterDetails::query();
-
-        $generateLinkId = $request->query('generate_link_id');
-        if ($generateLinkId) {
-            $centersQuery->where('generate_link_id', $generateLinkId);
-        }
+        $centersQuery = $this->applyFilters(CenterDetails::query(), $request);
 
         $centers = $centersQuery->orderByDesc('id')->get();
 
@@ -168,5 +218,22 @@ class CenterDetailController extends Controller
         }
 
         return Excel::download(new CenterDetailsExport($centers), 'center_details.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $centersQuery = $this->applyFilters(CenterDetails::query(), $request);
+
+        $centers = $centersQuery->orderByDesc('id')->get();
+
+        if ($centers->isEmpty()) {
+            return redirect()->back()->with('error', 'No data available to export.');
+        }
+
+        $pdf = Pdf::loadView('center_details.pdf', [
+            'centers' => $centers,
+        ])->setPaper('A4', 'landscape');
+
+        return $pdf->download('center_details.pdf');
     }
 }
