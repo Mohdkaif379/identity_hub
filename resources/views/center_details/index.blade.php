@@ -6,52 +6,73 @@
     <title>Center Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .hide-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 p-4 sm:p-6">
-    <div class="max-w-7xl mx-auto">
+<body class="relative bg-[#ece7df] min-h-screen overflow-x-hidden overflow-y-auto hide-scrollbar text-slate-900">
+    <div class="pointer-events-none absolute -top-20 -right-16 h-60 w-60 rounded-full bg-gradient-to-br from-[#fcecd7] via-[#f3e3cf] to-transparent blur-2xl opacity-80"></div>
+    <div class="pointer-events-none absolute -bottom-24 -left-10 h-72 w-72 rounded-full bg-gradient-to-br from-[#e6f2ff] via-[#d9ecff] to-transparent blur-3xl opacity-70"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
         @php
             $linksById = $links->keyBy('id');
         @endphp
        
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="rounded-3xl border border-slate-200/80 bg-white/90 backdrop-blur shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)] overflow-hidden">
+            <div class="px-4 sm:px-8 py-6 border-b border-slate-200/80">
+                <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h2 class="text-2xl font-semibold text-slate-900">Center Dashboard</h2>
-                <p class="text-sm text-slate-500">Overview and management for all centers.</p>
+                <div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 mb-2">
+                    <span class="h-2 w-2 rounded-full bg-blue-900"></span>
+                    Center Overview
+                </div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900">Center Dashboard</h2>
+                <p class="text-sm text-slate-500 mt-1">Overview and management for all centers.</p>
             </div>
             <div class="flex items-center gap-3">
                <a href="javascript:history.back()"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-sm font-medium hover:from-blue-900 hover:to-blue-700 shadow-sm">
+   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs sm:text-sm font-medium hover:from-blue-900 hover:to-blue-700 shadow-sm">
     <i class="fas fa-arrow-left text-sm"></i>
     Back
 </a>
                <a href="{{ route('center_details.export', request()->query()) }}"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-green-950 via-green-900 to-green-800 text-white text-sm font-medium hover:from-green-900 hover:to-green-700 shadow-sm">
+   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-green-950 via-green-900 to-green-800 text-white text-xs sm:text-sm font-medium hover:from-green-900 hover:to-green-700 shadow-sm">
     <i class="fas fa-download text-sm"></i>
     Export to Excel
 </a>
 <a href="{{ route('center_details.create') }}"
-   class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-sm font-medium  shadow-sm">
+   class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs sm:text-sm font-medium shadow-sm">
     <i class="fas fa-plus text-sm"></i>
     Create Center
 </a>
 
             </div>
         </div>
+            </div>
 
         @if (session('success'))
-            <div class="mt-4 rounded-md bg-neutral-100 text-neutral-900 px-4 py-3 text-sm border border-neutral-200">
+            <div class="mx-4 sm:mx-8 mt-4 rounded-xl bg-emerald-50 text-emerald-900 px-4 py-3 text-sm border border-emerald-200">
                 {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="mt-4 rounded-md bg-red-100 text-red-900 px-4 py-3 text-sm border border-red-200">
+            <div class="mx-4 sm:mx-8 mt-4 rounded-xl bg-red-100 text-red-900 px-4 py-3 text-sm border border-red-200">
                 {{ session('error') }}
             </div>
         @endif
 
-        <div class="mt-6 overflow-x-auto rounded-lg border border-blue-900/20 bg-white shadow-sm">
-            <table class="max-w-full text-sm">
+        <div class="px-4 sm:px-8 pb-8">
+            <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200/80 bg-white shadow-[0_12px_32px_-22px_rgba(15,23,42,0.4)]">
+            <table class="min-w-full text-sm">
                 <thead class="bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white">
                     <tr>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">ID</th>
@@ -73,10 +94,10 @@
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-blue-900/10">
+                <tbody class="divide-y divide-slate-200/80">
                     @forelse ($centers as $center)
-                        <tr class="bg-white hover:bg-blue-50/40">
-                            <td class="px-2 sm:px-4 py-3">{{ $center->id }}</td>
+                        <tr class="bg-white hover:bg-slate-50/70 transition">
+                            <td class="px-2 sm:px-4 py-3">{{ $loop->iteration }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->alias ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->ecn ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ optional($center->doj)->format('Y-m-d') ?? '-' }}</td>
@@ -99,11 +120,11 @@
                             <td class="px-2 sm:px-4 py-3">{{ optional($center->created_at)->format('Y-m-d H:i') ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">
                                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
-                                    <a href="{{ route('center_details.edit', $center->id) }}" class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs font-medium hover:from-blue-900 hover:to-blue-700">Edit</a>
+                                    <a href="{{ route('center_details.edit', $center->id) }}" class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-blue-950 via-blue-900 to-blue-800 text-white text-xs font-medium hover:from-blue-900 hover:to-blue-700">Edit</a>
                                     <form action="{{ route('center_details.destroy', $center->id) }}" method="POST" onsubmit="return confirm('Delete this center?')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-white text-black text-xs font-medium border border-neutral-300 hover:bg-neutral-100">Delete</button>
+                                        <button type="submit" class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white text-black text-xs font-medium border border-neutral-300 hover:bg-neutral-100">Delete</button>
                                     </form>
                                 </div>
                             </td>
@@ -115,6 +136,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 </body>

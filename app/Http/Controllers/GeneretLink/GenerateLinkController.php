@@ -15,16 +15,15 @@ class GenerateLinkController extends Controller
         if (!Auth::check()) {
             return redirect()->route('admin.login');
         }
-
-        $links = GenerateLink::query()
-            ->orderByDesc('id')
-            ->get();
-
-        return view('ganaratelink.index', compact('links'));
+        return redirect()->route('dashboard');
     }
 
-    public function generate()
+    public function generate(Request $request)
     {
+        $validated = $request->validate([
+            'center_name' => ['required', 'string', 'max:255'],
+        ]);
+
         $token = Str::random(32);
         $link = route('generate.link.open', $token);
 
@@ -32,11 +31,18 @@ class GenerateLinkController extends Controller
             'status' => 'active',
             'link' => $link,
             'token' => $token,
+            'center_name' => $validated['center_name'],
         ]);
 
         return response()->json([
             'status' => true,
             'link' => $record->link,
+            'record' => [
+                'id' => $record->id,
+                'status' => $record->status,
+                'center_name' => $record->center_name,
+                'created_at' => optional($record->created_at)->format('Y-m-d H:i'),
+            ],
         ]);
     }
 

@@ -29,7 +29,7 @@ Route::post('admin/login', [LoginController::class, 'login'])->name('admin.login
 Route::post('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-Route::get('generate-link', [GenerateLinkController::class, 'generate'])->name('generate.link');
+Route::post('generate-link', [GenerateLinkController::class, 'generate'])->name('generate.link');
 Route::get('generate-link/{token}', [GenerateLinkController::class, 'open'])->name('generate.link.open');
 Route::post('generate-link/{id}/status', [GenerateLinkController::class, 'updateStatus'])->name('generate.link.status');
 Route::get('generate-link-list', [GenerateLinkController::class, 'index'])->name('generate.link.index');

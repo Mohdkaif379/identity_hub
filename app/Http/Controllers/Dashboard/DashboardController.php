@@ -18,7 +18,10 @@ class DashboardController extends Controller
         $linkCount = GenerateLink::count();
         $activeLinkCount = GenerateLink::where('status', 'active')->count();
         $inactiveLinkCount = GenerateLink::where('status', 'inactive')->count();
+        $links = GenerateLink::query()
+            ->orderByDesc('id')
+            ->get();
 
-        return view('dashboard.dashboard', compact('centerCount', 'linkCount', 'activeLinkCount', 'inactiveLinkCount'));
+        return view('dashboard.dashboard', compact('centerCount', 'linkCount', 'activeLinkCount', 'inactiveLinkCount', 'links'));
     }
 }

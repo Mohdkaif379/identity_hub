@@ -9,6 +9,7 @@ use App\Exports\CenterDetailsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -72,7 +73,7 @@ class CenterDetailController extends Controller
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
-            unset($validated['password']);
+            $validated['password'] = Hash::make(Str::random(16));
         }
         $validated['ip_address'] = $request->ip();
 

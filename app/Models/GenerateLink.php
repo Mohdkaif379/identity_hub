@@ -15,5 +15,6 @@ class GenerateLink extends Model
         'status',
         'link',
         'token',
+        'center_name',
     ];
 }
