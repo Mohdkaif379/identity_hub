@@ -1,0 +1,5 @@
+- [x] Update body and main container for responsive padding and height
+- [x] Adjust login form section padding, font sizes, and input/button sizes for mobile
+- [x] Adjust welcome section padding, font sizes, and layout for mobile
+- [x] Modify floating shapes to hide or reduce on mobile
+- [x] Fine-tune animations and other elements for mobile performance
