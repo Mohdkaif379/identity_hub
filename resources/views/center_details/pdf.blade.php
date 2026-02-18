@@ -13,12 +13,18 @@
     </style>
 </head>
 <body>
-    <h1>
-        Center Details
-        @if (!empty($centerName))
-            - {{ $centerName }}
-        @endif
-    </h1>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+        <tr>
+            <td style="border: 0; padding: 0;">
+                <h1 style="margin: 0;">Center Details</h1>
+            </td>
+            <td style="border: 0; padding: 0; text-align: right;">
+                @if (!empty($centerName))
+                    <span class="muted" style="font-size: 12px; font-weight: 700;">Center Name: {{ $centerName }}</span>
+                @endif
+            </td>
+        </tr>
+    </table>
     <table>
         <thead>
             <tr>
