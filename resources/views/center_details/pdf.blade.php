@@ -13,7 +13,12 @@
     </style>
 </head>
 <body>
-    <h1>Center Details</h1>
+    <h1>
+        Center Details
+        @if (!empty($centerName))
+            - {{ $centerName }}
+        @endif
+    </h1>
     <table>
         <thead>
             <tr>
@@ -23,6 +28,7 @@
                 <th>DOJ</th>
                 <th>Center Name</th>
                 <th>Name</th>
+                <th>Role</th>
                 <th>Projects Code</th>
                 <th>CRM ID</th>
                 <th>Email</th>
@@ -44,6 +50,7 @@
                     <td>{{ optional($center->doj)->format('Y-m-d') ?? '-' }}</td>
                     <td>{{ $center->centername ?? '-' }}</td>
                     <td>{{ $center->name ?? '-' }}</td>
+                    <td>{{ $center->role ?? '-' }}</td>
                     <td>{{ $center->projectscode ?? '-' }}</td>
                     <td>{{ $center->crmid ?? '-' }}</td>
                     <td>{{ $center->email ?? '-' }}</td>
@@ -57,7 +64,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="16" class="muted">No centers found.</td>
+                    <td colspan="17" class="muted">No centers found.</td>
                 </tr>
             @endforelse
         </tbody>

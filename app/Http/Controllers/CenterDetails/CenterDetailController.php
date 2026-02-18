@@ -103,7 +103,8 @@ class CenterDetailController extends Controller
             'doj' => ['nullable', 'date'],
             'centername' => ['nullable', 'string', 'max:255'],
             'name' => ['nullable', 'string', 'max:255'],
-            'role' => ['nullable', Rule::in(['QA', 'Agent', 'TL'])],
+            'role' => ['nullable', Rule::in(['QA', 'Agent', 'TL', 'other'])],
+            'role_other' => ['nullable', 'string', 'max:255', 'required_if:role,other'],
             'projectscode' => ['nullable', 'string', 'max:255'],
             'crmid' => ['nullable', 'string', 'max:255'],
             'password' => ['nullable', 'string', 'min:6'],
@@ -115,6 +116,11 @@ class CenterDetailController extends Controller
             'approved_by' => ['nullable', 'string', 'max:255'],
             'generate_link_id' => ['nullable', 'integer', 'exists:generate_links,id'],
         ]);
+
+        if (($validated['role'] ?? null) === 'other') {
+            $validated['role'] = $validated['role_other'] ?? null;
+        }
+        unset($validated['role_other']);
 
         $sessionLinkId = $request->session()->get('generate_link_id');
         if ($sessionLinkId && !Auth::check()) {
@@ -168,7 +174,8 @@ class CenterDetailController extends Controller
             'doj' => ['nullable', 'date'],
             'centername' => ['nullable', 'string', 'max:255'],
             'name' => ['nullable', 'string', 'max:255'],
-            'role' => ['nullable', Rule::in(['QA', 'Agent', 'TL'])],
+            'role' => ['nullable', Rule::in(['QA', 'Agent', 'TL', 'other'])],
+            'role_other' => ['nullable', 'string', 'max:255', 'required_if:role,other'],
             'projectscode' => ['nullable', 'string', 'max:255'],
             'crmid' => ['nullable', 'string', 'max:255'],
             'password' => ['nullable', 'string', 'min:6'],
@@ -179,6 +186,11 @@ class CenterDetailController extends Controller
             'created_by' => ['nullable', 'string', 'max:255'],
             'approved_by' => ['nullable', 'string', 'max:255'],
         ]);
+
+        if (($validated['role'] ?? null) === 'other') {
+            $validated['role'] = $validated['role_other'] ?? null;
+        }
+        unset($validated['role_other']);
 
         if (array_key_exists('password', $validated) && $validated['password']) {
             $validated['password'] = Hash::make($validated['password']);
@@ -217,7 +229,21 @@ class CenterDetailController extends Controller
             return redirect()->back()->with('error', 'No data available to export.');
         }
 
-        return Excel::download(new CenterDetailsExport($centers), 'center_details.xlsx');
+        $centerName = null;
+        $generateLinkId = $request->query('generate_link_id');
+        if ($generateLinkId) {
+            $centerName = optional(GenerateLink::find($generateLinkId))->center_name;
+        }
+
+        $filename = 'center_details.xlsx';
+        if (!empty($centerName)) {
+            $safeCenterName = Str::slug($centerName);
+            if ($safeCenterName !== '') {
+                $filename = 'center_details_' . $safeCenterName . '.xlsx';
+            }
+        }
+
+        return Excel::download(new CenterDetailsExport($centers), $filename);
     }
 
     public function exportPdf(Request $request)
@@ -230,8 +256,15 @@ class CenterDetailController extends Controller
             return redirect()->back()->with('error', 'No data available to export.');
         }
 
+        $centerName = null;
+        $generateLinkId = $request->query('generate_link_id');
+        if ($generateLinkId) {
+            $centerName = optional(GenerateLink::find($generateLinkId))->center_name;
+        }
+
         $pdf = Pdf::loadView('center_details.pdf', [
             'centers' => $centers,
+            'centerName' => $centerName,
         ])->setPaper('A4', 'landscape');
 
         return $pdf->download('center_details.pdf');

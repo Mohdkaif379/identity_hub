@@ -107,6 +107,7 @@
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">DOJ</th>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">Center Name</th>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">Name</th>
+                        <th class="px-2 sm:px-4 py-3 text-left font-semibold">Role</th>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">Projects Code</th>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">CRM ID</th>
                         <th class="px-2 sm:px-4 py-3 text-left font-semibold">Email</th>
@@ -129,6 +130,7 @@
                             <td class="px-2 sm:px-4 py-3">{{ optional($center->doj)->format('Y-m-d') ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->centername ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->name ?? '-' }}</td>
+                            <td class="px-2 sm:px-4 py-3">{{ $center->role ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->projectscode ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->crmid ?? '-' }}</td>
                             <td class="px-2 sm:px-4 py-3">{{ $center->email ?? '-' }}</td>
@@ -157,7 +159,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="px-4 py-8 text-center text-neutral-500" colspan="20">No centers found.</td>
+                            <td class="px-4 py-8 text-center text-neutral-500" colspan="21">No centers found.</td>
                         </tr>
                     @endforelse
                 </tbody>

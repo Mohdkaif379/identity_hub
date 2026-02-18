@@ -172,6 +172,30 @@
                                 <p class="text-xs text-slate-500 mt-1">Will be used for login and notifications</p>
                             </div>
 
+                            <!-- Center Name -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700 flex items-center justify-between">
+                                    <span>Center Name</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="centername" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter full center name">
+                                    <div class="absolute right-3 top-3 text-slate-400">
+                                        <i class="fas fa-university text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Projects Code -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700">Projects Code</label>
+                                <div class="relative">
+                                    <input type="text" name="projectscode" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter project code">
+                                    <div class="absolute right-3 top-3 text-slate-400">
+                                        <i class="fas fa-code text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Gender -->
                             <div class="space-y-2">
                                 <label class="text-sm font-medium text-slate-700">Gender</label>
@@ -189,18 +213,22 @@
                             </div>
 
                             <!-- Role -->
-                            <div class="space-y-2">
+                            <div class="space-y-2 role-field">
                                 <label class="text-sm font-medium text-slate-700">Role</label>
                                 <div class="relative">
-                                    <select name="role" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200 appearance-none">
+                                    <select name="role" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200 appearance-none role-select">
                                         <option value="">Select Role</option>
                                         <option value="QA">QA</option>
                                         <option value="Agent">Agent</option>
                                         <option value="TL">TL</option>
+                                        <option value="other">Other</option>
                                     </select>
                                     <div class="absolute right-3 top-3 text-slate-400 pointer-events-none">
                                         <i class="fas fa-chevron-down text-sm"></i>
                                     </div>
+                                </div>
+                                <div class="relative role-other hidden">
+                                    <input type="text" name="role_other" value="{{ old('role_other') }}" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter role">
                                 </div>
                             </div>
 
@@ -295,17 +323,19 @@
                         @endif
 
                         <!-- Center Name -->
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-slate-700 flex items-center justify-between">
-                                <span>Center Name</span>
-                            </label>
-                            <div class="relative">
-                                <input type="text" name="centername" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter full center name" @disabled(!$isAuth)>
-                                <div class="absolute right-3 top-3 text-slate-400">
-                                    <i class="fas fa-university text-sm"></i>
+                        @if ($isAuth)
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700 flex items-center justify-between">
+                                    <span>Center Name</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="centername" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter full center name">
+                                    <div class="absolute right-3 top-3 text-slate-400">
+                                        <i class="fas fa-university text-sm"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- Name -->
                         @if ($isAuth)
@@ -321,15 +351,17 @@
                         @endif
 
                         <!-- Projects Code -->
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium text-slate-700">Projects Code</label>
-                            <div class="relative">
-                                <input type="text" name="projectscode" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter project code" @disabled(!$isAuth)>
-                                <div class="absolute right-3 top-3 text-slate-400">
-                                    <i class="fas fa-code text-sm"></i>
+                        @if ($isAuth)
+                            <div class="space-y-2">
+                                <label class="text-sm font-medium text-slate-700">Projects Code</label>
+                                <div class="relative">
+                                    <input type="text" name="projectscode" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter project code">
+                                    <div class="absolute right-3 top-3 text-slate-400">
+                                        <i class="fas fa-code text-sm"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <!-- CRM ID -->
                         <div class="space-y-2">
@@ -428,18 +460,22 @@
 
                         <!-- Role -->
                         @if ($isAuth)
-                            <div class="space-y-2">
+                            <div class="space-y-2 role-field">
                                 <label class="text-sm font-medium text-slate-700">Role</label>
                                 <div class="relative">
-                                    <select name="role" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200 appearance-none">
+                                    <select name="role" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200 appearance-none role-select">
                                         <option value="">Select Role</option>
                                         <option value="QA">QA</option>
                                         <option value="Agent">Agent</option>
                                         <option value="TL">TL</option>
+                                        <option value="other">Other</option>
                                     </select>
                                     <div class="absolute right-3 top-3 text-slate-400 pointer-events-none">
                                         <i class="fas fa-chevron-down text-sm"></i>
                                     </div>
+                                </div>
+                                <div class="relative role-other hidden">
+                                    <input type="text" name="role_other" value="{{ old('role_other') }}" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm input-focus transition-all duration-200" placeholder="Enter role">
                                 </div>
                             </div>
                         @endif
@@ -574,6 +610,32 @@
             element.addEventListener('blur', function() {
                 this.parentElement.classList.remove('ring-2', 'ring-slate-900/10');
             });
+        });
+
+        // Toggle "Other" role input
+        document.querySelectorAll('.role-field').forEach(field => {
+            const select = field.querySelector('.role-select');
+            const otherWrap = field.querySelector('.role-other');
+            if (!select || !otherWrap) {
+                return;
+            }
+            const otherInput = otherWrap.querySelector('input');
+            const toggleOther = () => {
+                if (select.value === 'other') {
+                    otherWrap.classList.remove('hidden');
+                    if (otherInput) {
+                        otherInput.required = true;
+                    }
+                } else {
+                    otherWrap.classList.add('hidden');
+                    if (otherInput) {
+                        otherInput.required = false;
+                        otherInput.value = '';
+                    }
+                }
+            };
+            select.addEventListener('change', toggleOther);
+            toggleOther();
         });
     </script>
 </body>
